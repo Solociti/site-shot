@@ -239,6 +239,16 @@ function fill() {
 
 function fit() {
   const cap = document.body.classList.contains("cap");
+  const g = cap && state.geo;
+  if (g) {
+    // Geometry is snapped to whole video pixels so tiles abut without seams.
+    const k = g.sw / (g.kx * W);
+    const t = state.tile || { s: 1, i: 0, j: 0 };
+    scene.style.transform = `scale(${k * t.s})`;
+    scene.style.left = (g.ox - t.i * g.sw) / g.kx + "px";
+    scene.style.top = (g.oy - t.j * g.sh) / g.ky + "px";
+    return;
+  }
   const k = cap
     ? Math.min(innerWidth / W, innerHeight / H)
     : stage.clientWidth / W;
@@ -408,7 +418,7 @@ $("dl").onclick = async () => {
   let stream;
   try {
     stream = await navigator.mediaDevices.getDisplayMedia({
-      video: true,
+      video: { cursor: "never" },
       preferCurrentTab: true,
     });
   } catch (e) {
@@ -423,43 +433,59 @@ $("dl").onclick = async () => {
     document.body.classList.add("cap");
     fit();
     await new Promise((r) => setTimeout(r, 900));
-    const rc = scene.getBoundingClientRect(),
-      k = v.videoWidth / innerWidth;
+    const kx = v.videoWidth / innerWidth,
+      ky = v.videoHeight / innerHeight;
+    // Largest tile width (multiple of 8 so height is a whole number at 16:10) that fits the video.
+    const cw = Math.floor(Math.min(v.videoWidth, (v.videoHeight * W) / H) / 8) * 8,
+      ch = (cw * H) / W;
+    const ox = Math.round((v.videoWidth - cw) / 2),
+      oy = Math.round((v.videoHeight - ch) / 2);
+    state.geo = { kx, ky, sw: cw, sh: ch, ox, oy };
     const c = document.createElement("canvas");
-    c.width = Math.round(rc.width * k);
-    c.height = Math.round(rc.height * k);
-    const ctx = c.getContext("2d", { willReadFrequently: true });
-    const capture = (context) =>
-      context.drawImage(
-        v,
-        rc.left * k,
-        rc.top * k,
-        rc.width * k,
-        rc.height * k,
-        0,
-        0,
-        c.width,
-        c.height,
-      );
-    capture(ctx);
-    if (Number($("bgOpacity").value) < 100) {
-      const dark = ctx.getImageData(0, 0, c.width, c.height);
-      document.body.classList.add("cap-light");
-      await new Promise((r) => setTimeout(r, 900));
-      capture(ctx);
-      const light = ctx.getImageData(0, 0, c.width, c.height);
-      recoverAlpha(dark.data, light.data);
-      ctx.putImageData(dark, 0, 0);
+    const scale = Number($("scale").value) || 1;
+    c.width = cw * scale;
+    c.height = ch * scale;
+    const out = c.getContext("2d");
+    const tc = document.createElement("canvas");
+    tc.width = cw;
+    tc.height = ch;
+    const ctx = tc.getContext("2d", { willReadFrequently: true });
+    const capture = () =>
+      ctx.drawImage(v, ox, oy, cw, ch, 0, 0, cw, ch);
+    const transparent = Number($("bgOpacity").value) < 100;
+    // Each tile is captured at native screen resolution, so output is truly sharp.
+    for (let j = 0; j < scale; j++) {
+      for (let i = 0; i < scale; i++) {
+        state.tile = { s: scale, i, j };
+        fit();
+        await new Promise((r) => setTimeout(r, i || j ? 500 : 900));
+        capture();
+        if (transparent) {
+          const dark = ctx.getImageData(0, 0, cw, ch);
+          document.body.classList.add("cap-light");
+          await new Promise((r) => setTimeout(r, 500));
+          capture();
+          const light = ctx.getImageData(0, 0, cw, ch);
+          document.body.classList.remove("cap-light");
+          recoverAlpha(dark.data, light.data);
+          ctx.putImageData(dark, 0, 0);
+        }
+        out.drawImage(tc, i * cw, j * ch);
+      }
     }
     c.toBlob((b) => {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(b);
-      a.download = "device-mockup.png";
+      a.download =
+        (state.mode === "url" ? new URL(state.url).hostname : "device-mockup") +
+        ".png";
       a.click();
       URL.revokeObjectURL(a.href);
     }, "image/png");
   } finally {
     stream.getTracks().forEach((t) => t.stop());
+    state.tile = null;
+    state.geo = null;
     document.body.classList.remove("cap-light");
     document.body.classList.remove("cap");
     fit();
@@ -470,6 +496,7 @@ const settingsKey = "siteshot-settings";
 const settingsIds = [
   "url",
   "hideSb",
+  "scale",
   "frame",
   "frameColor",
   "bg",

@@ -224,6 +224,10 @@ body.cap .stage {
   background: #000;
   box-shadow: none;
 }
+body.cap,
+body.cap * {
+  cursor: none !important;
+}
 body.cap-light .stage {
   background: #fff;
 }
