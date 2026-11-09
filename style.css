@@ -1,0 +1,232 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f3f6fa;
+  color: #1f2937;
+}
+.app {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 24px;
+}
+aside {
+  flex: 0 1 370px;
+  min-width: 0;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(15, 42, 68, 0.1);
+  align-self: flex-start;
+}
+main {
+  flex: 1 1 600px;
+  min-width: 0;
+}
+h1 {
+  font-size: 20px;
+  margin: 0 0 4px;
+  color: #1e3a5f;
+}
+p.sub,
+.hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+p.sub {
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+.hint {
+  margin-top: 10px;
+}
+label.f {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 16px 0 6px;
+}
+input[type="text"],
+input[type="file"],
+select,
+input[type="color"] {
+  width: 100%;
+  font-size: 13px;
+}
+input[type="text"],
+select {
+  padding: 9px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+}
+input[type="color"] {
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+}
+.chk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 13px;
+}
+.chk label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.devices {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+.device-row {
+  display: grid;
+  grid-template-columns: minmax(78px, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+.device-row label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.device-row input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 3px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.row select {
+  flex: 1;
+  min-width: 0;
+}
+.row input[type="color"] {
+  flex: 0 0 40px;
+  width: 40px;
+}
+#bgOpacity {
+  width: 100%;
+}
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1a8f9a, #7b3fb0);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #1a8f9a;
+  outline-offset: 2px;
+}
+#status {
+  color: #b45309;
+  min-height: 1em;
+}
+#previewStatus {
+  color: #6b7280;
+}
+
+.stage {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(15, 42, 68, 0.12);
+  background: conic-gradient(#e5e7eb 25%, #fff 0 50%, #e5e7eb 0 75%, #fff 0) 0 0 / 16px 16px;
+}
+#scene {
+  position: absolute;
+  width: 1600px;
+  height: 1000px;
+  transform-origin: 0 0;
+  --f: #1b1f27;
+  --f2: #2b313c;
+  background: linear-gradient(135deg, #e9f0f8, #c9d7e8);
+}
+#scene .g {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#scene .dev {
+  position: absolute;
+  pointer-events: auto;
+  background: var(--f);
+  box-shadow: 0 20px 40px rgba(15, 30, 55, 0.35);
+}
+#scene .in {
+  position: absolute;
+  background: #06090e;
+}
+#scene .scr {
+  position: absolute;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a8f9a, #7b3fb0);
+  color: rgba(255, 255, 255, 0.92);
+  font: 600 26px sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+}
+#scene iframe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 0;
+  background: #fff;
+  transform-origin: 0 0;
+}
+#scene .x {
+  position: absolute;
+  background: linear-gradient(var(--f), var(--f2));
+}
+#scene .dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1f2937;
+}
+body.cap .stage {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: #000;
+  box-shadow: none;
+}
+body.cap-light .stage {
+  background: #fff;
+}
+body.cap iframe {
+  pointer-events: none;
+}

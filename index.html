@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Site Shot</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside>
+        <h1>Site Shot</h1>
+        <p class="sub">
+          Enter a website to see it live on a monitor, laptop, tablet and phone,
+          each at its own screen width, then download it as a PNG.
+        </p>
+
+        <form id="form">
+          <label class="f" for="url">Website URL</label>
+          <input
+            id="url"
+            type="text"
+            placeholder="https://example.com"
+            autocomplete="url"
+            inputmode="url"
+          />
+          <button type="submit">Load website</button>
+        </form>
+        <p class="hint">
+          Scroll or click inside a device to pick the part of the page you want
+          to show. Some sites block embedding; if a device stays blank or shows
+          a refused connection, upload a screenshot instead.
+        </p>
+
+        <label class="f" for="fMain">Or upload a screenshot</label>
+        <input id="fMain" type="file" accept="image/*" />
+        <label class="f" for="fMobile">Mobile screenshot (optional)</label>
+        <input id="fMobile" type="file" accept="image/*" />
+
+        <label class="f">Devices</label>
+        <div class="devices">
+          <div class="device-row">
+            <label><input type="checkbox" data-d="monitor" checked /> Monitor</label>
+            <label>Left: <input type="number" data-device="monitor" data-axis="x" aria-label="Monitor left in pixels" /></label>
+            <label>Top: <input type="number" data-device="monitor" data-axis="y" aria-label="Monitor top in pixels" /></label>
+          </div>
+          <div class="device-row">
+            <label><input type="checkbox" data-d="laptop" checked /> Laptop</label>
+            <label>Left: <input type="number" data-device="laptop" data-axis="x" aria-label="Laptop left in pixels" /></label>
+            <label>Top: <input type="number" data-device="laptop" data-axis="y" aria-label="Laptop top in pixels" /></label>
+          </div>
+          <div class="device-row">
+            <label><input type="checkbox" data-d="tablet" checked /> Tablet</label>
+            <label>Left: <input type="number" data-device="tablet" data-axis="x" aria-label="Tablet left in pixels" /></label>
+            <label>Top: <input type="number" data-device="tablet" data-axis="y" aria-label="Tablet top in pixels" /></label>
+          </div>
+          <div class="device-row">
+            <label><input type="checkbox" data-d="phone" checked /> Phone</label>
+            <label>Left: <input type="number" data-device="phone" data-axis="x" aria-label="Phone left in pixels" /></label>
+            <label>Top: <input type="number" data-device="phone" data-axis="y" aria-label="Phone top in pixels" /></label>
+          </div>
+        </div>
+
+        <label class="f">Screenshot</label>
+        <div class="chk">
+          <label
+            ><input type="checkbox" id="hideSb" checked /> Hide
+            scrollbars</label
+          >
+        </div>
+
+        <label class="f" for="frame">Device color</label>
+        <div class="row">
+          <select id="frame">
+            <option value="black">Space black</option>
+            <option value="silver">Silver</option>
+            <option value="white">White</option>
+          </select>
+          <input
+            id="frameColor"
+            type="color"
+            value="#1b1f27"
+            aria-label="Custom device color"
+          />
+        </div>
+
+        <label class="f" for="bg">Background</label>
+        <div class="row" id="customBg">
+          <select id="bg">
+            <option value="sky">Soft blue</option>
+            <option value="white">White</option>
+            <option value="dark">Dark</option>
+            <option value="brand">Teal to purple</option>
+            <option value="transparent">Transparent</option>
+          </select>
+          <input
+            id="bg1"
+            type="color"
+            value="#e9f0f8"
+            aria-label="Background start color"
+          />
+          <input
+            id="bg2"
+            type="color"
+            value="#c9d7e8"
+            aria-label="Background end color"
+          />
+        </div>
+        <label class="f" for="bgOpacity">Background opacity</label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="100" />
+
+        <button id="dl" type="button" style="margin-top: 22px">
+          Download PNG
+        </button>
+        <p class="hint">
+          Download uses your browser's tab capture. Pick "this tab" when asked;
+          the tool then crops the result to the mockup. Works best in Chrome or
+          Edge.
+        </p>
+        <p class="hint" id="status" role="status"></p>
+      </aside>
+
+      <main>
+        <div class="stage" id="stage"><div id="scene"></div></div>
+        <p class="hint" id="previewStatus" role="status" aria-live="polite"></p>
+      </main>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
