@@ -1,15 +1,10 @@
 # Site Shot
 
-A AI generated tool to create beautiful screenshots of websites quickly.
+> An AI generated tool to create beautiful screenshots of websites quickly.
+
+Available for free on [GitHub Pages](https://solociti.github.io/site-shot/)
 
 Enter a website URL and see it live on a monitor, laptop, tablet and phone, each rendered at its own screen width. Then download the result as a PNG. Runs entirely in the browser, with no build step and no dependencies.
-
-## Deploy on GitHub Pages
-
-1. Create a new public repository and add `index.html` to the root.
-2. Open **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, then save.
-4. After a minute the tool is live at `https://<your-username>.github.io/<repo-name>/`.
 
 ## Use
 
